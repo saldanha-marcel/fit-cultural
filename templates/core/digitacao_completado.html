@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Teste de Digitação - Concluído - Fit Cultural{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/digitacao.css' %}">
+
+<main class="flex-1 flex justify-center">
+    <div class="container">
+        <div class="center-content">
+            <h1>Teste de Digitação Concluído!</h1>
+            <p>Você já realizou este teste.</p>
+            {% if completed_at %}
+                <p style="font-size: 14px; color: #999;">
+                    Data: {{ completed_at|date:"d/m/Y H:i:s" }}
+                </p>
+            {% endif %}
+            <p style="margin-top: 20px; font-size: 14px; color: #666;">
+                Este teste só pode ser realizado uma única vez.
+            </p>
+        </div>
+        <button onclick="location.href='/app/'" class="btn" style="margin-top: 30px;">Voltar ao Painel</button>
+    </div>
+</main>
+
+{% endblock %}

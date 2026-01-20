@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Usuários{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-8">
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Lista de Usuários</h1>
+    {% if user.perfil == 'full' %}
+    <a href="{% url 'create_user' %}" class="px-4 py-2.5 bg-primary hover:opacity-90 text-white rounded-md transition font-medium">
+        + Criar Novo Usuário
+    </a>
+    {% endif %}
+</div>
+
+{% if messages %}
+<div id="messages" class="mb-6">
+    {% for message in messages %}
+    <div class="
+        {% if message.tags == 'success' %} bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200
+        {% elif message.tags == 'error' %} bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200
+        {% else %} bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200 {% endif %} p-4 rounded-md mb-4">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    setTimeout(function () {
+        var msg = document.getElementById("messages");
+        if (msg) {
+            msg.style.transition = "opacity 0.5s ease";
+            msg.style.opacity = "0";
+            setTimeout(function () { msg.remove(); }, 500);
+        }
+    }, 3000);
+</script>
+{% endif %}
+
+<div class="overflow-x-auto rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
+    <table class="min-w-full text-left">
+        <thead class="bg-slate-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <tr>
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">ID</th>
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">Nome</th>
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">E-mail</th>
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">Perfil</th>
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">Status</th>
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white text-center">Ações</th>
+            </tr>
+        </thead>
+
+        <tbody class="divide-y divide-gray-200 dark:divide-slate-700 bg-white dark:bg-slate-900">
+            {% for user in usuarios %}
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{{ user.id }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">{{ user.first_name }} {{ user.last_name }}</td>
+                <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{{ user.email }}</td>
+                <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
+                    <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded text-xs font-medium">
+                        {{ user.get_perfil_display }}
+                    </span>
+                </td>
+                <td class="px-6 py-4 text-sm">
+                    {% if user.is_active %}
+                    <span class="px-2.5 py-1 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded text-xs font-medium border border-green-200 dark:border-green-800">✓ Ativo</span>
+                    {% else %}
+                    <span class="px-2.5 py-1 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded text-xs font-medium border border-red-200 dark:border-red-800">✕ Inativo</span>
+                    {% endif %}
+                </td>
+                {% if request.user.perfil == 'full' %}
+                <td class="px-6 py-4 flex justify-center gap-3">
+                    <a href="{% url 'edit_user' user.id %}" class="text-primary hover:text-primary/70 font-medium text-sm transition">
+                        Editar
+                    </a>
+                    <span class="text-slate-300 dark:text-slate-600">|</span>
+                    <a href="{% url 'delete_user' user.id %}" class="text-red-600 hover:text-red-700 font-medium text-sm transition">
+                        Excluir
+                    </a>
+                </td>
+                {% else %}
+                <td class="px-6 py-4 text-center text-sm text-slate-500 dark:text-slate-400">
+                    —
+                </td>
+                {% endif %}
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center py-8 text-slate-500 dark:text-slate-400">
+                    Nenhum usuário cadastrado.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

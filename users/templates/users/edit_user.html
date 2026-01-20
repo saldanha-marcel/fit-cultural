@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Usuário{% endblock %}
+
+{% block content %}
+
+<div class="flex items-center justify-center min-h-[80vh] px-4">
+  <div class="w-full max-w-md bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-8 shadow-sm">
+    <h3 class="text-2xl font-bold mb-6 text-center text-slate-900 dark:text-white">Editar Usuário</h3>
+    <form method="post" class="space-y-5">
+      {% csrf_token %}
+      
+      {% for field in form %}
+        {% if field.name != 'password1' and field.name != 'password2' %}
+          <div>
+            <label class="block text-sm font-medium leading-6 text-slate-900 dark:text-slate-200 mb-2">
+              {{ field.label }}
+            </label>
+            {{ field }}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <div class="flex justify-between gap-3 mt-8">
+        <a href="{% url 'list_users' %}"
+          class="flex-1 px-4 py-2.5 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white rounded-md hover:bg-slate-300 dark:hover:bg-slate-600 transition font-medium text-center">
+          Cancelar
+        </a>
+        <button type="submit"
+          class="flex-1 px-4 py-2.5 bg-primary hover:opacity-90 text-white rounded-md transition font-medium">
+          Atualizar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

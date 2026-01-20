@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="flex-1 px-4 md:px-10 py-8 flex justify-center">
+    <div class="max-w-7xl w-full flex flex-col gap-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h1 class="text-[#111418] text-3xl font-black leading-tight tracking-tight">Candidatos Avaliados
+                </h1>
+                <p class="text-[#617589] font-medium mt-1">Gerenciamento de resultados e perfis comportamentais</p>
+            </div>
+        </div>
+        <div
+            class="bg-white p-4 rounded-xl border border-[#e5e7eb] shadow-sm flex flex-col md:flex-row gap-4 items-center">
+            <div class="relative w-full md:w-96">
+                <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#617589]">search</span>
+                <input
+                    class="w-full pl-10 pr-4 py-2 border border-[#dbe0e6] rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm"
+                    placeholder="Buscar por nome do candidato..." type="text" />
+            </div>
+
+        </div>
+        <div class="bg-white rounded-xl border border-[#e5e7eb] shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-[#fcfdfd] border-b border-[#e5e7eb]">
+                            <th class="px-6 py-4 text-xs font-bold text-[#617589] uppercase tracking-wider">
+                                Candidato</th>
+                            <th class="px-6 py-4 text-xs font-bold text-[#617589] uppercase tracking-wider">Data da
+                                Avaliação</th>
+                            <th class="px-6 py-4 text-xs font-bold text-[#617589] uppercase tracking-wider">
+                                Velocidade (WPM)</th>
+                            <th class="px-6 py-4 text-xs font-bold text-[#617589] uppercase tracking-wider">Precisão
+                                (%)</th>
+                            <th class="px-6 py-4 text-xs font-bold text-[#617589] uppercase tracking-wider">Perfil
+                                Dominante</th>
+                            <th class="px-6 py-4 text-xs font-bold text-[#617589] uppercase tracking-wider text-right">
+                                Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-[#eff1f3]">
+                        {% for candidato in candidatos %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
+                                        {{ candidato.user.first_name.0|upper }}{{ candidato.user.last_name.0|upper }}
+                                    </div>
+                                    <div>
+                                        <p class="text-[#111418] font-bold">{{ candidato.user.first_name }} {{ candidato.user.last_name }}</p>
+                                        <p class="text-[#617589] text-xs">{{ candidato.user.vaga|default:"Não informado" }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-[#111418]">{{ candidato.typing_test.created_at|date:"d/m/Y" }}</td>
+                            <td class="px-6 py-4 font-semibold text-[#111418]">{{ candidato.typing_test.wpm_average|floatformat:0 }} <span
+                                    class="text-[10px] text-[#617589]">WPM</span></td>
+                            <td class="px-6 py-4">
+                                <span class="text-sm font-semibold {% if candidato.typing_test.accuracy_average >= 95 %}text-[#078838]{% elif candidato.typing_test.accuracy_average >= 85 %}text-yellow-600{% else %}text-red-600{% endif %}">
+                                    {{ candidato.typing_test.accuracy_average|floatformat:1 }}%
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                {% if candidato.behavioral_profile %}
+                                    <span class="profile-badge-{{ candidato.behavioral_profile.dominant_quadrant }} px-3 py-1 rounded-full text-xs font-bold border">
+                                        {{ candidato.behavioral_profile.dominant_quadrant }} - {{ candidato.behavioral_profile.get_dominant_quadrant_display }}
+                                    </span>
+                                {% else %}
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">
+                                        Pendente
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <button class="text-primary hover:bg-blue-50 px-3 py-1.5 rounded-md text-sm font-bold transition-colors inline-flex items-center gap-1">
+                                    <a href="{% url 'detalhes_candidato' candidato.user.id %}">Ver Detalhes</a>
+                                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                                </button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="px-6 py-12 text-center text-[#617589]">
+                                Nenhum candidato avaliado ainda.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-6 py-4 border-t border-[#e5e7eb] flex items-center justify-between">
+                <p class="text-sm text-[#617589]">
+                    {% if candidatos %}
+                        Exibindo {{ candidatos|length }} candidato{{ candidatos|length|pluralize }}
+                    {% else %}
+                        Nenhum candidato encontrado
+                    {% endif %}
+                </p>
+                <div class="flex gap-2">
+                    <button class="p-2 rounded-lg border border-[#dbe0e6] hover:bg-gray-50 disabled:opacity-50"
+                        disabled="">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    <button class="px-3.5 py-1.5 rounded-lg bg-primary text-white text-sm font-bold">1</button>
+                    <button class="p-2 rounded-lg border border-[#dbe0e6] hover:bg-gray-50 disabled:opacity-50"
+                        disabled="">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+
+{% endblock %}

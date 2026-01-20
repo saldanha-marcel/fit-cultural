@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .progress-bar {
+        width: var(--progress);
+    }
+    .progress-bar {
+        transition: width 0.5s ease-in-out;
+    }
+    .progress-text {
+        transition: all 0.5s ease-in-out;
+    }
+</style>
+
+<main class="flex-1 flex justify-center py-8 px-4 sm:px-8 lg:px-12">
+        <div class="flex flex-1 justify-center py-8 px-4 sm:px-10 lg:px-10">
+            <!-- HOME PAGE -->
+            <div class="page active" id="page-home">
+                <div class="flex flex-col max-w-[1024px] flex-1 gap-8 w-full">
+                    <!-- Welcome & Progress Section -->
+                    <div
+                        class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between p-4 bg-white dark:bg-[#111a22] rounded-xl shadow-sm border border-gray-100 dark:border-[#2a3441]">
+                        <div class="flex flex-col gap-2 max-w-xl">
+                            <h2
+                                class="text-3xl md:text-3xl font-black leading-tight tracking-[-0.033em] text-[#111418] dark:text-white">
+                                Bem-vindo ao Processo de Avaliação
+                            </h2>
+                            <p class="text-[#617589] dark:text-gray-400 text-base font-normal">
+                                Complete as etapas abaixo sequencialmente para finalizar sua candidatura.
+                            </p>
+                        </div>
+                        <div class="flex flex-col gap-2 w-full md:w-64">
+                            <div class="flex justify-between items-end">
+                                <span class="text-sm font-semibold text-[#111418] dark:text-white">Progresso
+                                    Geral</span>
+                                <span
+                                    class="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full progress-text">
+                                    {% if progress.all_tests_completed %}
+                                        2/2 Concluídos
+                                    {% elif progress.typing_test_completed %}
+                                        1/2 Concluídos
+                                    {% else %}
+                                        0/2 Concluídos
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="h-2.5 w-full rounded-full bg-[#f0f2f4] dark:bg-gray-700 overflow-hidden">
+                                <div class="h-full rounded-full bg-primary transition-all duration-500 progress-bar"
+                                    style="--progress: {{ progress.progress_percentage }}%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modules Grid -->
+                    <div>
+                        <h2 class="text-[#111418] dark:text-white text-xl font-bold mb-5 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">grid_view</span>
+                            Módulos de Avaliação
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Card 1: Typing Test -->
+                            <div
+                                class="group relative flex flex-col rounded-xl overflow-hidden bg-white dark:bg-[#111a22] shadow-[0_2px_8px_rgba(0,0,0,0.08)] dark:shadow-none border border-transparent dark:border-[#2a3441] hover:border-primary/30 transition-all duration-300">
+                                <div class="absolute top-4 right-4 z-10">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full {% if progress.typing_test_completed %}bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400{% else %}bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400{% endif %} text-xs font-bold border {% if progress.typing_test_completed %}border-green-100 dark:border-green-800{% else %}border-amber-100 dark:border-amber-800{% endif %}">
+                                        <span class="size-1.5 rounded-full {% if progress.typing_test_completed %}bg-green-500{% else %}bg-amber-500{% endif %}"></span>
+                                        {% if progress.typing_test_completed %}
+                                            ✓ Concluído
+                                        {% else %}
+                                            Pendente
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="h-40 w-full bg-cover bg-center relative"
+                                    data-alt="Close up of hands typing on a laptop keyboard with a blurred office background"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCNKR7OzLV5nEo-vvVXgs7EZFFdEp6O9K3Glp1U8zXzob1jJE3TYqhZQou4-87NlHSQIl8Km9KSy8yq44Pn_Bu6XOIkk-bh49mEDVtxo-aG5XGtSfVzADFg37xAXr8-qoWq30fNHv6KkUtAQ5cXzVdTmYUnaNwYn-x9KU6Bg3tnXP-AwSvYNlC_Y2LFP9FHXrx3kopRahkXyteRNOLSTV1afPlB9RDYMgkcUlM1ccMBUwByfYzljHWvwa0FWzozoBpXLiOdYQ3iE-nM");'>
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                    <div class="absolute bottom-4 left-4 text-white">
+                                        <div class="p-2 bg-white/20 backdrop-blur-sm rounded-lg w-fit mb-2">
+                                            <span class="material-symbols-outlined block text-2xl">keyboard</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-1 flex-col p-5 gap-4">
+                                    <div>
+                                        <h3 class="text-xl font-bold text-[#111418] dark:text-white mb-2">Teste de
+                                            Digitação</h3>
+                                        <p class="text-[#617589] dark:text-gray-400 text-sm leading-relaxed">
+                                            Avalie sua velocidade (WPM) e precisão de escrita. Este teste é fundamental.
+                                        </p>
+                                    </div>
+                                    <div
+                                        class="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                            <span class="material-symbols-outlined text-base">schedule</span>
+                                            ~5 minutos
+                                        </div>
+                                        <button data-navigate="typing-instructions"
+                                            class="flex cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-primary hover:bg-blue-600 text-white text-sm font-bold shadow-md shadow-blue-500/20 transition-all">
+                                            <a href="{% url 'digitacao' %}" class="block px-4 py-2">Iniciar Teste</a>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Behavioral Assessment -->
+                            <div
+                                class="group relative flex flex-col rounded-xl overflow-hidden bg-white dark:bg-[#111a22] shadow-[0_2px_8px_rgba(0,0,0,0.08)] dark:shadow-none border border-transparent dark:border-[#2a3441] {% if progress.typing_test_completed %}hover:border-primary/30{% else %}opacity-60{% endif %} transition-all duration-300">
+                                <div class="absolute top-4 right-4 z-10">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full {% if progress.behavioral_test_completed %}bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400{% elif progress.typing_test_completed %}bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400{% else %}bg-gray-50 dark:bg-gray-900/30 text-gray-700 dark:text-gray-400{% endif %} text-xs font-bold border {% if progress.behavioral_test_completed %}border-green-100 dark:border-green-800{% elif progress.typing_test_completed %}border-blue-100 dark:border-blue-800{% else %}border-gray-100 dark:border-gray-800{% endif %}">
+                                        <span class="size-1.5 rounded-full {% if progress.behavioral_test_completed %}bg-green-500{% elif progress.typing_test_completed %}bg-blue-500{% else %}bg-gray-500{% endif %}"></span>
+                                        {% if progress.behavioral_test_completed %}
+                                            ✓ Concluído
+                                        {% elif progress.typing_test_completed %}
+                                            Disponível
+                                        {% else %}
+                                            🔒 Bloqueado
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="h-40 w-full bg-cover bg-center relative"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC1AxBKmk9H5Mhb5KEhLjDEXzkAWExqd7JV7rKY3gcntvtcQUbQi6CUhottqqm294WCznT211c4etZvDIsTfhY8inq64Ee_vtOE1ZxcYKB_gG_PyIAKonlzpMgFHmT-dXW4W4fCwZIl5kWQTq4EGRHVjui4PBRyYnxNQFixLtAZjurb5O4bh8AigvUYRQt04ggfKvIWNNd1GyQpFo6G2r43H7H4BgdFgo-tp0YLvAHZo7nq2MZLy9Rnz53357yh2SJJbS7J3a2qUrDe")'>
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                    <div class="absolute bottom-4 left-4 text-white">
+                                        <div class="p-2 bg-white/20 backdrop-blur-sm rounded-lg w-fit mb-2">
+                                            <span class="material-symbols-outlined block text-2xl">psychology</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-1 flex-col p-5 gap-4">
+                                    <div>
+                                        <h3 class="text-xl font-bold text-[#111418] dark:text-white mb-2">Perfil
+                                            Comportamental</h3>
+                                        <p class="text-[#617589] dark:text-gray-400 text-sm leading-relaxed">
+                                            Avaliação de preferências de trabalho e soft skills.
+                                        </p>
+                                    </div>
+                                    <div
+                                        class="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                            <span class="material-symbols-outlined text-base">schedule</span>
+                                            ~15 minutos
+                                        </div>
+                                        {% if progress.typing_test_completed %}
+                                            <button data-navigate="behavioral-instructions"
+                                                class="flex cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-primary hover:bg-blue-600 text-white text-sm font-bold shadow-md shadow-blue-500/20 transition-all">
+                                                 <a href="{% url 'personalidade' %}" class="block px-4 py-2">Iniciar Teste</a>
+                                            </button>
+                                        {% else %}
+                                            <button disabled
+                                                class="flex items-center justify-center rounded-lg h-10 px-6 bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-sm font-bold cursor-not-allowed opacity-60">
+                                                 Bloqueado
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- BEHAVIORAL INSTRUCTIONS PAGE -->
+            <div class="page hidden" id="page-behavioral-instructions">
+                <div class="flex flex-col max-w-[800px] flex-1 w-full">
+                    <button
+                        class="btn-back flex items-center gap-2 text-gray-500 hover:text-primary transition-colors mb-8 group w-fit">
+                        <span class="material-symbols-outlined text-xl">arrow_back</span>
+                        <span class="text-sm font-medium">Voltar ao painel</span>
+                    </button>
+                    <div
+                        class="bg-white dark:bg-[#111a22] rounded-2xl shadow-sm border border-gray-100 dark:border-[#2a3441] overflow-hidden">
+                        <div class="p-8 md:p-12">
+                            <div class="flex justify-center mb-8">
+                                <div class="relative">
+                                    <div class="absolute inset-0 bg-primary/10 blur-2xl rounded-full"></div>
+                                    <div
+                                        class="relative flex items-center justify-center size-24 rounded-3xl bg-primary/5 text-primary border border-primary/20">
+                                        <span class="material-symbols-outlined text-5xl">psychology</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mb-10">
+                                <h1 class="text-3xl font-black text-[#111418] dark:text-white mb-4">Perfil
+                                    Comportamental</h1>
+                                <p class="text-[#617589] dark:text-gray-400 text-lg">
+                                    Entenda como você prefere processar informações no trabalho.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-1 gap-6 mb-12">
+                                <div
+                                    class="flex items-start gap-4 p-5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800">
+                                    <div
+                                        class="flex items-center justify-center size-10 rounded-full bg-white dark:bg-gray-800 shadow-sm text-primary font-bold shrink-0">
+                                        1</div>
+                                    <div>
+                                        <h3 class="font-bold text-[#111418] dark:text-white">Responda com honestidade
+                                        </h3>
+                                        <p class="text-sm text-[#617589] dark:text-gray-400 mt-1">Baseie-se em suas
+                                            preferências reais, não no que espera ser.</p>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-start gap-4 p-5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800">
+                                    <div
+                                        class="flex items-center justify-center size-10 rounded-full bg-white dark:bg-gray-800 shadow-sm text-primary font-bold shrink-0">
+                                        2</div>
+                                    <div>
+                                        <h3 class="font-bold text-[#111418] dark:text-white">Sem respostas certas</h3>
+                                        <p class="text-sm text-[#617589] dark:text-gray-400 mt-1">O objetivo é
+                                            identificar seu perfil único. Siga sua intuição.</p>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-start gap-4 p-5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800">
+                                    <div
+                                        class="flex items-center justify-center size-10 rounded-full bg-white dark:bg-gray-800 shadow-sm text-primary font-bold shrink-0">
+                                        3</div>
+                                    <div>
+                                        <h3 class="font-bold text-[#111418] dark:text-white">Tempo</h3>
+                                        <p class="text-sm text-[#617589] dark:text-gray-400 mt-1">Leva cerca de 10-15
+                                            minutos. Procure um ambiente calmo.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center gap-4">
+                                <button data-navigate="behavioral-test"
+                                    class="w-full sm:w-[280px] h-14 bg-primary hover:bg-blue-600 text-white rounded-xl font-bold text-lg shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-3">
+                                    Iniciar Avaliação
+                                    <span class="material-symbols-outlined text-2xl">play_circle</span>
+                                </button>
+                                <div class="flex items-center gap-2 text-xs text-gray-400 font-medium">
+                                    <span class="material-symbols-outlined text-sm">lock</span>
+                                    Seus dados estão protegidos.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+</main>
+{% endblock %}

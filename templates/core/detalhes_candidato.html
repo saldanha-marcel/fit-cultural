@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<style>
+    .quadrant_a_score {
+        width: var(--quadrant-a-score);
+        transition: width 0.5s ease-in-out;
+    }
+    .quadrant_b_score {
+        width: var(--quadrant-b-score);
+        transition: width 0.5s ease-in-out;
+    }
+    .quadrant_c_score {
+        width: var(--quadrant-c-score);
+        transition: width 0.5s ease-in-out;
+    }
+    .quadrant_d_score {
+        width: var(--quadrant-d-score);
+        transition: width 0.5s ease-in-out;
+    }
+
+    .progress-text {
+        transition: all 0.5s ease-in-out;
+    }
+
+</style>
+
+{% block content %}
+
+<main class="bg-background-light dark:bg-background-dark text-[#111418] font-display overflow-x-hidden min-h-screen flex flex-col">
+    <div class="layout-container flex h-full grow flex-col">
+        <!-- Main Content -->
+        <div class="flex-1 px-4 md:px-10 py-8 flex justify-center">
+            <div class="max-w-7xl w-full flex flex-col gap-8">
+                <!-- Header Section -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="flex flex-col gap-2">
+                        <h1 class="text-[#111418] text-3xl md:text-4xl font-black leading-tight tracking-tight">
+                            Resultado Unificado: {{ candidato.first_name }} {{ candidato.last_name }}
+                        </h1>
+                        <div class="flex flex-wrap items-center gap-3 text-[#617589] text-sm md:text-base font-medium">
+                            <span class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                                {{ typing_test.created_at|date:"d/m/Y" }}
+                            </span>
+                            <span class="h-1 w-1 rounded-full bg-[#617589]"></span>
+                            <span class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">work</span>
+                                Cargo: {{ candidato.vaga|default:"Não informado" }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Dashboard Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Left Column: Technical Performance -->
+                    <div class="flex flex-col gap-6">
+                        <!-- Card Header -->
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-2xl">keyboard</span>
+                            <h2 class="text-[#111418] text-xl font-bold">Desempenho Técnico</h2>
+                        </div>
+                        <!-- Stats Cards -->
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-[#e5e7eb]">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                                <div class="flex flex-col gap-1 p-4 rounded-lg bg-[#f8f9fa] border border-[#eff1f3]">
+                                    <div class="flex items-center gap-2 text-[#617589] text-sm font-medium">
+                                        <span class="material-symbols-outlined text-[18px]">speed</span>
+                                        Velocidade
+                                    </div>
+                                    <p class="text-[#111418] text-2xl font-bold">{{ typing_test.wpm_average|floatformat:0 }} <span
+                                            class="text-sm font-normal text-[#617589]">WPM</span></p>
+                                </div>
+                                <div class="flex flex-col gap-1 p-4 rounded-lg bg-[#f8f9fa] border border-[#eff1f3]">
+                                    <div class="flex items-center gap-2 text-[#617589] text-sm font-medium">
+                                        <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                        Precisão
+                                    </div>
+                                    <p class="text-[#111418] text-2xl font-bold">{{ typing_test.accuracy_average|floatformat:1 }}<span
+                                            class="text-sm font-normal text-[#617589]">%</span></p>
+                                </div>
+                                <div class="flex flex-col gap-1 p-4 rounded-lg bg-[#f8f9fa] border border-[#eff1f3]">
+                                    <div class="flex items-center gap-2 text-[#617589] text-sm font-medium">
+                                        <span class="material-symbols-outlined text-[18px]">timer</span>
+                                        Tempo Total
+                                    </div>
+                                    <p class="text-[#111418] text-2xl font-bold">{{ tempo_total }}</p>
+                                </div>
+                            </div>
+                            <!-- Chart Area -->
+                            <div class="flex flex-col gap-4">
+                                <div class="flex justify-between items-end">
+                                    <div>
+                                        <p class="text-[#111418] text-base font-semibold">Consistência de Digitação</p>
+                                        <p class="text-[#617589] text-sm">WPM ao longo do tempo</p>
+                                    </div>
+                                    <div
+                                        class="px-3 py-1 rounded-full bg-[#e6f4ea] text-[#078838] text-xs font-bold flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                                        Estável (+2%)
+                                    </div>
+                                </div>
+                                <div class="relative w-full h-[150px] mt-2">
+                                    <svg fill="none" height="100%" preserveaspectratio="none" viewbox="0 0 478 150"
+                                        width="100%" xmlns="http://www.w3.org/2000/svg">
+                                        <defs>
+                                            <lineargradient gradientunits="userSpaceOnUse" id="paint0_linear" x1="239"
+                                                x2="239" y1="0" y2="150">
+                                                <stop stop-color="#137fec" stop-opacity="0.2"></stop>
+                                                <stop offset="1" stop-color="#137fec" stop-opacity="0"></stop>
+                                            </lineargradient>
+                                        </defs>
+                                        <path
+                                            d="M0 109C18.15 109 36.3 21 54.46 21C72.61 21 90.76 41 108.92 41C127.07 41 145.23 93 163.38 93C181.53 93 199.69 33 217.84 33C236 33 254.15 101 272.3 101C290.46 101 308.61 61 326.76 61C344.92 61 363.07 45 381.23 45C399.38 45 417.53 121 435.69 121C453.84 121 472 149 472 149V150H0V109Z"
+                                            fill="url(#paint0_linear)"></path>
+                                        <path
+                                            d="M0 109C18.15 109 36.3 21 54.46 21C72.61 21 90.76 41 108.92 41C127.07 41 145.23 93 163.38 93C181.53 93 199.69 33 217.84 33C236 33 254.15 101 272.3 101C290.46 101 308.61 61 326.76 61C344.92 61 363.07 45 381.23 45C399.38 45 417.53 121 435.69 121C453.84 121 472 149 472 149"
+                                            stroke="#137fec" stroke-linecap="round" stroke-width="3"></path>
+                                    </svg>
+                                </div>
+                                <div class="flex justify-between text-[#617589] text-xs font-medium px-1">
+                                    <span>0:00</span>
+                                    <span>0:45</span>
+                                    <span>1:30</span>
+                                    <span>2:15</span>
+                                    <span>3:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Column: Behavioral Profile -->
+                    <div class="flex flex-col gap-6">
+                        <!-- Card Header -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-2xl">psychology</span>
+                                <h2 class="text-[#111418] text-xl font-bold">Perfil Comportamental</h2>
+                            </div>
+                            {% if behavioral_profile.dominant_quadrant == 'A' %}
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                                Analítico
+                            </span>
+                            {% elif behavioral_profile.dominant_quadrant == 'B' %}
+                            <span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                                Organizacional
+                            </span>
+                            {% elif behavioral_profile.dominant_quadrant == 'C' %}
+                            <span class="bg-red-100 text-red-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                                Relacional
+                            </span>
+                            {% elif behavioral_profile.dominant_quadrant == 'D' %}
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                                Experimental
+                            </span>
+                            {% endif %}
+                        </div>
+                        <!-- Quadrant Viz -->
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-[#e5e7eb] flex flex-col h-full">
+                            <h3 class="text-[#111418] font-semibold mb-4 text-center">Matriz de Preferência Cerebral
+                                (Herrmann)</h3>
+                            <div class="grid grid-cols-2 gap-3 flex-1 min-h-[300px]">
+                                <!-- Quadrant A: Analytical (Blue) -->
+                                <div
+                                    class="bg-[#eef6ff] border border-blue-200 rounded-lg p-4 flex flex-col justify-between relative overflow-hidden group">
+                                    <div
+                                        class="absolute top-0 right-0 w-16 h-16 bg-blue-500/10 rounded-bl-full -mr-4 -mt-4">
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                                            <span class="text-blue-900 font-bold text-sm">A - Analítico</span>
+                                        </div>
+                                        <p class="text-xs text-blue-700 leading-snug">Lógico, factual, crítico, técnico,
+                                            quantitativo.</p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <div class="flex justify-between items-end mb-1">
+                                            <span class="text-2xl font-black text-blue-600">{{ behavioral_profile.quadrant_a_score|floatformat:0 }}</span>
+                                            <span class="text-xs font-bold text-blue-400">{% if behavioral_profile.quadrant_a_score >= 100 %}ALTO{% elif behavioral_profile.quadrant_a_score >= 70 %}MÉDIO-ALTO{% elif behavioral_profile.quadrant_a_score >= 40 %}MÉDIO{% else %}BAIXO{% endif %}</span>
+                                        </div>
+                                        <div class="w-full bg-blue-200 h-1.5 rounded-full">
+                                            <div class="bg-blue-600 h-1.5 rounded-full" style="--quadrant-a-score: {{ behavioral_profile.quadrant_a_score }}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Quadrant D: Experimental (Yellow) -->
+                                <div
+                                    class="bg-[#fff9e6] border border-yellow-200 rounded-lg p-4 flex flex-col justify-between relative overflow-hidden">
+                                    <div
+                                        class="absolute top-0 right-0 w-16 h-16 bg-yellow-500/10 rounded-bl-full -mr-4 -mt-4">
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                                            <span class="text-yellow-900 font-bold text-sm">D - Experimental</span>
+                                        </div>
+                                        <p class="text-xs text-yellow-800 leading-snug">Visual, holístico, intuitivo,
+                                            integrador, sintetizador.</p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <div class="flex justify-between items-end mb-1">
+                                            <span class="text-2xl font-black text-yellow-600">{{ behavioral_profile.quadrant_d_score|floatformat:0 }}</span>
+                                            <span class="text-xs font-bold text-yellow-500">{% if behavioral_profile.quadrant_d_score >= 100 %}ALTO{% elif behavioral_profile.quadrant_d_score >= 70 %}MÉDIO-ALTO{% elif behavioral_profile.quadrant_d_score >= 40 %}MÉDIO{% else %}BAIXO{% endif %}</span>
+                                        </div>
+                                        <div class="w-full bg-yellow-200 h-1.5 rounded-full">
+                                            <div class="bg-yellow-500 h-1.5 rounded-full quadrant_d_score" style="--quadrant-d-score:  {{ behavioral_profile.quadrant_d_score }}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Quadrant B: Organizational (Green) -->
+                                <div
+                                    class="bg-[#e8f5e9] border border-green-200 rounded-lg p-4 flex flex-col justify-between relative overflow-hidden">
+                                    <div
+                                        class="absolute top-0 right-0 w-16 h-16 bg-green-500/10 rounded-bl-full -mr-4 -mt-4">
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="w-3 h-3 rounded-full bg-green-600"></span>
+                                            <span class="text-green-900 font-bold text-sm">B - Organizacional</span>
+                                        </div>
+                                        <p class="text-xs text-green-800 leading-snug">Sequencial, organizado,
+                                            detalhista, planejado.</p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <div class="flex justify-between items-end mb-1">
+                                            <span class="text-2xl font-black text-green-700">{{ behavioral_profile.quadrant_b_score|floatformat:0 }}</span>
+                                            <span class="text-xs font-bold text-green-600">{% if behavioral_profile.quadrant_b_score >= 100 %}ALTO{% elif behavioral_profile.quadrant_b_score >= 70 %}MÉDIO-ALTO{% elif behavioral_profile.quadrant_b_score >= 40 %}MÉDIO{% else %}BAIXO{% endif %}</span>
+                                        </div>
+                                        <div class="w-full bg-green-200 h-1.5 rounded-full">
+                                            <div class="bg-green-600 h-1.5 rounded-full" style="--quadrant-b-score: {{ behavioral_profile.quadrant_b_score }}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Quadrant C: Relational (Red) -->
+                                <div
+                                    class="bg-[#ffebee] border border-red-200 rounded-lg p-4 flex flex-col justify-between relative overflow-hidden">
+                                    <div
+                                        class="absolute top-0 right-0 w-16 h-16 bg-red-500/10 rounded-bl-full -mr-4 -mt-4">
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                                            <span class="text-red-900 font-bold text-sm">C - Relacional</span>
+                                        </div>
+                                        <p class="text-xs text-red-800 leading-snug">Interpessoal, emocional,
+                                            sinestésico, falador.</p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <div class="flex justify-between items-end mb-1">
+                                            <span class="text-2xl font-black text-red-600">{{ behavioral_profile.quadrant_c_score|floatformat:0 }}</span>
+                                            <span class="text-xs font-bold text-red-400">{% if behavioral_profile.quadrant_c_score >= 100 %}ALTO{% elif behavioral_profile.quadrant_c_score >= 70 %}MÉDIO-ALTO{% elif behavioral_profile.quadrant_c_score >= 40 %}MÉDIO{% else %}BAIXO{% endif %}</span>
+                                        </div>
+                                        <div class="w-full bg-red-200 h-1.5 rounded-full">
+                                            <div class="bg-red-600 h-1.5 rounded-full" style="--quadrant-c-score: {{ behavioral_profile.quadrant_c_score }}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Interpretation / Synthesis Section -->
+                <div class="bg-white rounded-xl shadow-sm border border-[#e5e7eb] overflow-hidden">
+                    <div class="border-b border-[#e5e7eb] px-6 py-4 bg-[#fcfdfd]">
+                        <h3 class="text-[#111418] text-lg font-bold flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[#617589]">analytics</span>
+                            Análise Unificada dos Resultados
+                        </h3>
+                    </div>
+                    <div class="p-6 md:p-8 grid gap-6 md:grid-cols-[2fr_1fr]">
+                        <div class="flex flex-col gap-4">
+                            <p class="text-[#111418] text-base leading-relaxed">
+                                <span class="font-bold">Interpretação:</span> O candidato demonstra um perfil
+                                predominantemente <span class="text-blue-600 font-bold">Analítico (A)</span> com forte
+                                suporte <span class="text-green-600 font-bold">Organizacional (B)</span>. Esta
+                                combinação sugere um profissional focado em dados, fatos e estrutura.
+                            </p>
+                            <p class="text-[#617589] text-base leading-relaxed">
+                                A alta precisão no teste de digitação (98.5%) corrobora o perfil comportamental
+                                detalhista. A consistência estável ao longo dos 3 minutos indica capacidade de manter o
+                                foco em tarefas repetitivas sem perda de qualidade. Ideal para funções que exigem rigor
+                                técnico e baixa tolerância a erros.
+                            </p>
+                            <div class="mt-2 p-4 bg-blue-50 border border-blue-100 rounded-lg flex gap-3 items-start">
+                                <span class="material-symbols-outlined text-blue-600 mt-0.5">lightbulb</span>
+                                <div class="text-sm text-blue-900">
+                                    <span class="font-bold">Recomendação:</span> Candidato altamente recomendado para
+                                    cargos de gestão de dados, análise financeira ou funções administrativas que
+                                    demandem alta conformidade.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 border-l border-[#eff1f3] pl-0 md:pl-8 pt-6 md:pt-0">
+                            <h4 class="text-sm font-bold text-[#617589] uppercase tracking-wider">Pontos Fortes</h4>
+                            <ul class="flex flex-col gap-3">
+                                <li class="flex items-center gap-2 text-sm text-[#111418]">
+                                    <span class="material-symbols-outlined text-green-600 text-[20px]">add_circle</span>
+                                    Atenção aos detalhes
+                                </li>
+                                <li class="flex items-center gap-2 text-sm text-[#111418]">
+                                    <span class="material-symbols-outlined text-green-600 text-[20px]">add_circle</span>
+                                    Raciocínio lógico estruturado
+                                </li>
+                                <li class="flex items-center gap-2 text-sm text-[#111418]">
+                                    <span class="material-symbols-outlined text-green-600 text-[20px]">add_circle</span>
+                                    Alta consistência técnica
+                                </li>
+                            </ul>
+                            <h4 class="text-sm font-bold text-[#617589] uppercase tracking-wider mt-2">Pontos de Atenção
+                            </h4>
+                            <ul class="flex flex-col gap-3">
+                                <li class="flex items-center gap-2 text-sm text-[#111418]">
+                                    <span class="material-symbols-outlined text-yellow-600 text-[20px]">warning</span>
+                                    Comunicação interpessoal
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

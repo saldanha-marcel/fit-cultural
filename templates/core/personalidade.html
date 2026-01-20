@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/personalidade.css' %}">
+
+<main class="flex-1 flex justify-center py-8 px-4">
+    <div id="wizard-container" class="wizard-container">
+        
+        <!-- Tela de Instruções -->
+        <div id="instructions-screen">
+            <div class="instructions-screen">
+                <div class="icon-large">🧠</div>
+                <h1>Teste de Perfil Comportamental</h1>
+                <p>Avaliação dos 3 Quadrantes de Pensamento</p>
+                
+                <div class="instructions-grid">
+                    <div class="instruction-card">
+                        <div class="instruction-number">1</div>
+                        <div class="instruction-content">
+                            <h3>25 Perguntas</h3>
+                            <p>O teste contém 25 perguntas distribuídas em 5 etapas de 5 perguntas cada.</p>
+                        </div>
+                    </div>
+                    <div class="instruction-card">
+                        <div class="instruction-number">2</div>
+                        <div class="instruction-content">
+                            <h3>Escala de 1 a 5</h3>
+                            <p>Responda cada questão usando a escala de concordância: 1 (Discordo Totalmente) a 5 (Concordo Totalmente).</p>
+                        </div>
+                    </div>
+                    <div class="instruction-card">
+                        <div class="instruction-number">3</div>
+                        <div class="instruction-content">
+                            <h3>4 Quadrantes</h3>
+                            <p>Seus resultados serão classificados em 4 estilos de pensamento: Analítico, Prático, Relacional e Inovador.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="start-btn" class="btn btn-primary" style="margin-top: 2rem; width: 100%;">
+                    Começar o Teste 🚀
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela de Questões -->
+        <div id="questions-screen" class="hidden">
+            <div class="wizard-progress">
+                <div class="progress-header">
+                    <span id="progress-text">Passo 1 de 5</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <div class="step-header">
+                <h2>Seção de Perguntas</h2>
+                <p>Responda cada pergunta de acordo com seu nível de concordância</p>
+            </div>
+
+            <div class="questions-container" id="questions-container"></div>
+
+            <div class="wizard-buttons">
+                <button id="prev-btn" class="btn btn-secondary" disabled>
+                    ← Anterior
+                </button>
+                <button id="next-btn" class="btn btn-primary" style="display: none;">
+                    Próximo →
+                </button>
+                <button id="submit-btn" class="btn btn-primary" style="display: none;">
+                    Finalizar Teste
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela Final -->
+        <div id="final-screen" class="container hidden">
+            <div class="center-content">
+                <div class="icon-large">✓</div>
+                <h1>Teste Concluído!</h1>
+                <p>Obrigado por participar. Seus resultados foram salvos com sucesso em nosso sistema.</p>
+            </div>
+            <button id="back-btn-final" class="btn">Voltar ao Painel ←</button>
+        </div>
+
+    </div>
+</main>
+
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+<script src="{% static 'js/personalidade.js' %}"></script>
+
+{% endblock %}

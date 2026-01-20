@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html class="h-full" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Admin Login | Sistema de Recrutamento</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#1e3a8a", // Deep corporate blue
+                        "background-light": "#ffffff",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="h-full bg-background-light dark:bg-background-dark transition-colors duration-200">
+    <div class="flex h-full flex-col lg:flex-row">
+        <div
+            class="flex flex-1 flex-col justify-center px-6 py-12 lg:px-24 xl:px-32 bg-background-light dark:bg-background-dark">
+            <div class="mx-auto w-full max-w-sm">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Bem-vindo de volta</h1>
+                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">Por favor, insira seus dados para acessar
+                        o painel administrativo.</p>
+                </div>
+
+                {% if form.non_field_errors %}
+                    <div class="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+                        <p class="text-sm text-red-800 dark:text-red-200">
+                            <strong>Erro de autenticação:</strong> Usuário ou senha incorretos.
+                        </p>
+                    </div>
+                {% endif %}
+
+                <form method="POST" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-slate-900 dark:text-slate-200"
+                            for="id_username">Usuário</label>
+                        <div class="mt-2">
+                            <input autocomplete="username"
+                                class="block w-full rounded-md border-0 py-2.5 px-3 text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-slate-300 dark:ring-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-white dark:bg-slate-800"
+                                id="id_username" name="username" placeholder="seu usuário" required="" type="text" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <label class="block text-sm font-medium leading-6 text-slate-900 dark:text-slate-200"
+                                for="id_password">Senha</label>
+                            <a href="{% url 'password_reset' %}" class="text-sm text-primary hover:text-primary/80">
+                                Esqueceu a senha?
+                            </a>
+                        </div>
+                        <div class="mt-2">
+                            <input autocomplete="current-password"
+                                class="block w-full rounded-md border-0 py-2.5 px-3 text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-slate-300 dark:ring-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-white dark:bg-slate-800"
+                                id="id_password" name="password" placeholder="••••••••" required="" type="password" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <button
+                            class="flex w-full justify-center rounded-md bg-primary px-3 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all uppercase tracking-wide"
+                            type="submit">
+                            Entrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="relative hidden flex-1 lg:block">
+            <img alt="Equipe de recrutamento colaborando em um escritório moderno"
+                class="absolute inset-0 h-full w-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDikfJvVAdLcipwHje6OfGwZy2epiicsejS17vaYLTBaCHlqRjhyNTl-2M4r-q8TF-6B7oY2DfJFQ-Qg8Pr-0QlR8tnz-n8R7iqFQpDgvt8-T9W4mzInPhCl0OP1IhbWouJgWFTXeTVtMzPvP-GlwBVcNG7XHhI1vz5WK30vT8v1erD7sTBKnOw2fcIBBWVM7GdaCCj8DpP5_ic7b0yvrHlT3auyjht9UlMGwK9VkDV2w_dEoudnFWu1_3jCODDsOmD0uyOtW_klzdi" />
+            <div class="absolute inset-0 bg-slate-900/40 mix-blend-multiply"></div>
+            <div
+                class="absolute bottom-0 left-0 right-0 p-12 xl:p-24 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent">
+                <div class="max-w-xl">
+                    <h2 class="text-4xl font-bold tracking-tight text-white sm:text-5xl leading-tight">
+                        Sua ferramenta de seleção offline
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

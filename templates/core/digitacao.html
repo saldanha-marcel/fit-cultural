@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/digitacao.css' %}">
+
+<main class="flex-1 flex justify-center">
+    <!-- Tela Inicial - Instruções -->
+    <div id="welcome-screen" class="container">
+        <div class="center-content">
+            <div class="icon-large">⌨</div>
+            <h1>Teste de Digitação</h1>
+            <p>Prepare-se para demonstrar suas habilidades de digitação</p>
+        </div>
+
+        <div class="instructions-grid">
+            <div class="instruction-card">
+                <div class="instruction-number">1</div>
+                <div class="instruction-content">
+                    <h3>Três Frases</h3>
+                    <p>Digite três frases que aparecerão na tela, uma de cada vez.</p>
+                </div>
+            </div>
+            <div class="instruction-card">
+                <div class="instruction-number">2</div>
+                <div class="instruction-content">
+                    <h3>Cronômetro Automático</h3>
+                    <p>O tempo começará ao pressionar a primeira tecla.</p>
+                </div>
+            </div>
+            <div class="instruction-card">
+                <div class="instruction-number">3</div>
+                <div class="instruction-content">
+                    <h3>Medição Precisa</h3>
+                    <p>Serão medidos WPM e precisão dos caracteres.</p>
+                </div>
+            </div>
+        </div>
+
+        <button id="start-btn" class="btn">Começar Teste</button>
+    </div>
+
+    <!-- Tela de Fase -->
+    <div id="phase-screen" class="container hidden">
+        <div class="progress">
+            <span>Fase <span id="current-phase">1</span> de 3</span>
+            <span id="phase-progress">33%</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill" style="width: 33%;"></div>
+        </div>
+        <div class="phrase" id="phrase-text">A tecnologia transforma a forma como trabalhamos todos os dias.</div>
+        <textarea id="input-text" class="textarea" placeholder="Digite o texto aqui..." spellcheck="false"></textarea>
+        <div class="metrics">
+            <div class="metric">
+                <div>Tempo</div>
+                <div class="metric-value" id="time-display">0.0s</div>
+            </div>
+            <div class="metric">
+                <div>WPM</div>
+                <div class="metric-value" id="wpm-display">0</div>
+            </div>
+            <div class="metric">
+                <div>Acurácia</div>
+                <div class="metric-value" id="accuracy-display">0%</div>
+            </div>
+        </div>
+        <button id="finish-phase-btn" class="btn" disabled>Finalizar Frase</button>
+    </div>
+
+    <!-- Tela Final -->
+    <div id="final-screen" class="container hidden">
+        <div class="center-content">
+            <div class="icon-large">✓</div>
+            <h1>Teste Concluído!</h1>
+            <p>Obrigado por participar. Seus resultados foram salvos com sucesso em nosso sistema.</p>
+        </div>
+        <button id="back-btn" class="btn">Voltar ao Painel</button>
+    </div>
+</main>
+
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+<script src="{% static 'js/digitacao.js' %}"></script>
+
+{% endblock %}

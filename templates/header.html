@@ -1,0 +1,60 @@
+{% load permission_tags %}
+<div class="flex items-center justify-between w-full">
+
+<!-- Left: Logo + Nav -->
+<div class="flex items-center gap-10">
+    
+    <!-- Logo -->
+    <a href="/" class="text-2xl font-bold text-primary">Recrut Hub</a>
+
+    <!-- Navigation -->
+    <nav class="hidden md:flex items-center gap-6 text-gray-600 font-medium">
+        {% if user|can:'manage_users' %}
+
+        <!-- Inicio -->
+        <a href="/" class="hover:text-primary transition">Inicio</a>
+        <!-- Dropdown Users -->
+        <div class="relative" x-data="{ open: false }">
+            <button @click="open = !open" class="flex items-center gap-1 hover:text-primary transition"> Usuários
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+            </button>
+
+            <!-- Dropdown menu -->
+            <div x-show="open" @click.outside="open = false" x-transition class="absolute top-full left-0 mt-2 w-40 bg-background-light shadow-lg rounded-md border py-2">
+                <a href="{% url 'create_user' %}" class="block px-4 py-2 hover:bg-gray-100">Criar Usuário</a>
+                <a href="{% url 'list_users' %}" class="block px-4 py-2 hover:bg-gray-100">Ver Usuários</a>
+            </div>
+        </div>
+        <!-- Relatórios -->
+        <a href="{% url 'relatorios' %}" class="hover:text-primary transition">Relatórios</a>
+
+        {% endif %}
+    </nav>
+
+</div>
+
+<!-- Right: Search + Actions -->
+<div class="flex items-center gap-4">
+    <!-- User Profile -->
+    <div class="flex items-left gap-3 cursor-pointer">
+    <img 
+        src="https://i.pravatar.cc/40" 
+        class="w-10 h-10 rounded-full border"
+    >
+    <div class="hidden md:flex flex-col leading-4">
+        <span class="font-medium text-gray-800"> {{ user.first_name }} {{ user.last_name }}</span>
+        {% if user.is_authenticated %}
+        <form id="logout-form" action="{% url 'logout' %}" method="post" class="hidden">
+            {% csrf_token %}
+        </form>
+        <a href="#" 
+        onclick="document.getElementById('logout-form').submit(); return false;"
+        class="text-sm text-gray-400 hover:text-gray-800">
+            Sair
+        </a>
+        {% endif %}
+    </div>
+    </div>
+
+</div>
+</div>
